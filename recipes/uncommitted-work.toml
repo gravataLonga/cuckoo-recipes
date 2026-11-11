@@ -1,0 +1,29 @@
+# Fails when a Git repository in PROJECTS has uncommitted changes, and lists them.
+name = "Uncommitted work"
+description = '''
+Looks at every Git repository directly inside a folder at the end of the day.
+Fails and lists the ones with changes that aren't committed yet.
+Set PROJECTS to the folder that holds your repositories. A leading ~ means your home folder.
+'''
+author = "Jonathan Fontes"
+website = "https://jonathan.pt"
+category = "Development"
+command = '''
+projects="${PROJECTS/#\~/$HOME}"
+[ -d "$projects" ] || { echo "Not found: $projects"; exit 1; }
+dirty=0
+for repo in "$projects"/*; do
+  [ -d "$repo/.git" ] || continue
+  changes=$(git -C "$repo" status --porcelain | wc -l | tr -d ' ')
+  if [ "$changes" -gt 0 ]; then
+    echo "${repo##*/}: $changes changed files"
+    dirty=1
+  fi
+done
+[ "$dirty" -eq 0 ] && echo "Everything is committed."
+exit $dirty
+'''
+at = ["18:00"]
+
+[environment]
+PROJECTS = "~/Code"

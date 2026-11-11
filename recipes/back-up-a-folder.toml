@@ -1,0 +1,24 @@
+# Copies SOURCE into DESTINATION. Nothing in DESTINATION is ever deleted.
+name = "Back up a folder"
+description = '''
+Copies a folder to another place every evening, for example an external disk.
+Only new and changed files are copied, and nothing is deleted from the backup.
+Fails when either folder is missing, for example when the disk isn't plugged in.
+Set SOURCE and DESTINATION to full paths. A leading ~ means your home folder.
+'''
+author = "Jonathan Fontes"
+website = "https://jonathan.pt"
+category = "Backups"
+command = '''
+from="${SOURCE/#\~/$HOME}"
+to="${DESTINATION/#\~/$HOME}"
+[ -d "$from" ] || { echo "Not found: $from"; exit 1; }
+[ -d "$to" ] || { echo "Not found: $to"; exit 1; }
+rsync -a --stats "$from/" "$to/"
+'''
+at = ["21:00"]
+timeout = 120
+
+[environment]
+SOURCE = "~/Documents"
+DESTINATION = "/Volumes/Backup/Documents"
