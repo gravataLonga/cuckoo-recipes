@@ -2,7 +2,7 @@
 name = "Disk space"
 description = '''
 Checks every hour how much space is free on the startup disk.
-Fails when fewer than MIN_FREE_GB gigabytes are left.
+Fails when free space drops below MIN_FREE_GB gigabytes.
 '''
 author = "Jonathan Fontes"
 website = "https://jonathan.pt"
