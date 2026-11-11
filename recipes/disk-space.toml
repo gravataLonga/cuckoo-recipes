@@ -6,7 +6,7 @@ Fails when less than MIN_FREE_GB gigabytes are left.
 '''
 author = "Jonathan Fontes"
 website = "https://jonathan.pt"
-category = "Storage"
+category = "System"
 command = '''
 free=$(df -g / | awk 'NR == 2 { print $4 }')
 echo "$free GB free, minimum $MIN_FREE_GB GB"
