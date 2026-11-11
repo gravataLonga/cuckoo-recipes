@@ -1,0 +1,29 @@
+name: Check Recipes
+
+# Never pull_request_target: Pull Requests from forks must run without secrets.
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+
+      # The image's python3 is 3.11 or later, so tomllib is in the standard library.
+      - name: Recipe rules
+        run: |
+          python3 --version
+          python3 -m unittest discover -s tests
+          python3 scripts/check-recipes.py
+
+      - name: cuckoo check from the latest Cuckoo
+        run: |
+          curl --fail --silent --show-error --location \
+            --output "$RUNNER_TEMP/Cuckoo.dmg" https://cuckoo.jonathan.pt/download/latest
+          hdiutil attach -nobrowse -readonly -mountpoint "$RUNNER_TEMP/Cuckoo" "$RUNNER_TEMP/Cuckoo.dmg"
+          "$RUNNER_TEMP/Cuckoo/Cuckoo.app/Contents/Helpers/cuckoo" check recipes/*.toml

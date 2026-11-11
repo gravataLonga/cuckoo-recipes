@@ -1,0 +1,19 @@
+# Fails when the page doesn't answer with a success status within 20 seconds.
+name = "Website is up"
+description = '''
+Checks every 5 minutes that a web page answers with a success status (2xx, after
+redirects). Fails on an error status, a timeout or a bad certificate.
+Set URL to the page to check.
+'''
+author = "Jonathan Fontes"
+website = "https://jonathan.pt"
+category = "Monitoring"
+command = '''
+curl --fail --silent --show-error --location --max-time 20 \
+  --output /dev/null --write-out "%{http_code} in %{time_total}s\n" "$URL"
+'''
+every = 5
+timeout = 1
+
+[environment]
+URL = "https://example.com"
