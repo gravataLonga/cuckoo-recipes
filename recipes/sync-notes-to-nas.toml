@@ -1,0 +1,17 @@
+name = "Sync notes to NAS"
+description = "asdf"
+author = "Jonathan Fontes"
+category = "Monitoring"
+directory = "~"
+command = '''
+echo "would rsync $NOTES_DIR to $NAS_URL with token ${NAS_TOKEN:0:4}…"
+echo "log at /Users/jfontes/Library/Logs/notes-sync.log"
+'''
+every = 120
+notify = "stateChanges"
+channels = ["mac"]
+
+[environment]
+NOTES_DIR = "~/Documents/Notes"
+NAS_URL = "https://nas.local:5001"
+NAS_TOKEN = "example"
